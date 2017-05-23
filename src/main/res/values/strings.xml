@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SampleLaunchee</string>
+    <string name="action_settings">Settings</string>
+    <string name="music_app_description">Music</string>
+    <string name="music_playlists_description">Playlists</string>
+    <string name="music_albums_description">Albums</string>
+    <string name="music_songs_description">Songs</string>
+    <string name="music_artists_description">Artists</string>
+</resources>
+
