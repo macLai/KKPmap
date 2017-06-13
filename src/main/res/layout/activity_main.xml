@@ -1,23 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_margin="5dp">
 
-    <TextView
-        android:text="Hello Baidu Map"
-        android:layout_gravity="center"
-        android:layout_margin="2dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <AbsoluteLayout
+        android:id="@+id/mapLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/bmapView"
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/bmapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true" />
+    </AbsoluteLayout>
+
+    <AbsoluteLayout
+        android:id="@+id/menuLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"/>
+        android:background="#FFFFFFFF"
+        android:visibility="gone">
 
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/menuLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_y="70dp"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/homeGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="HOME" />
+
+                <Button
+                    android:id="@+id/work"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="work" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/poiGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/food"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="food" />
+
+                <Button
+                    android:id="@+id/hotel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="hotel" />
+
+                <Button
+                    android:id="@+id/bank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="bank" />
+
+                <Button
+                    android:id="@+id/supermarket"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="super" />
+
+                <Button
+                    android:id="@+id/bus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="bus" />
+
+                <Button
+                    android:id="@+id/hospital"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="hospital" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/historyGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/history1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="世纪大道" />
+
+                <Button
+                    android:id="@+id/history2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="张江高科" />
+
+                <Button
+                    android:id="@+id/history3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="浦东机场" />
+
+                <Button
+                    android:id="@+id/history4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="东方明珠" />
+
+                <Button
+                    android:id="@+id/history5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="中山公园" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menuSearchLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_y="70dp"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <Button
+                android:id="@+id/searchans1"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="keyword1" />
+
+            <Button
+                android:id="@+id/searchans2"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="keyword1" />
+
+            <Button
+                android:id="@+id/searchans3"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="keyword1" />
+
+            <Button
+                android:id="@+id/searchans4"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="keyword1" />
+
+            <Button
+                android:id="@+id/searchans5"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="keyword1" />
+        </LinearLayout>
+
+    </AbsoluteLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="#FFFFFFFF"
+        android:baselineAligned="true">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="keyword" />
+    </android.support.design.widget.TextInputLayout>
+
+
+</RelativeLayout>

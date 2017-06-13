@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.os.Environment;
 
 import uie.multiaccess.app.UMAApplication;
 import uie.multiaccess.input.UMAHIDInputEventListener;
@@ -12,12 +13,28 @@ import uie.multiaccess.view.UMAFocusManager;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.BaiduMap;
+import android.widget.Button;
+import android.widget.Toast;
+import android.view.View;
+import android.view.View.OnClickListener;
+import com.baidu.navisdk.adapter.BNOuterTTSPlayerCallback;
+import com.baidu.navisdk.adapter.BNRoutePlanNode;
+import com.baidu.navisdk.adapter.BaiduNaviManager;
+import com.baidu.navisdk.adapter.BNRoutePlanNode.CoordinateType;
+import com.baidu.navisdk.adapter.BaiduNaviManager.NaviInitListener;
+import com.baidu.navisdk.adapter.BaiduNaviManager.RoutePlanListener;
+import java.util.ArrayList;
+import java.util.List;
+import android.content.Intent;
+import java.io.File;
+import com.baidu.mapapi.map.MyLocationData;
 
 public class MainActivity extends Activity implements UMAHIDInputEventListener {
 
 //    private UMAApplication umaApplication = UMAApplication.INSTANCE;
-    private BaiduMap mBaiduMap;
-    private MapView baiduMapView;
+    private MapController mapController = null;
+    private MapViewStatus mapViewStatus = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +43,11 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
         setContentView(R.layout.activity_main);
 //        umaApplication.create(this);
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//
 
-        baiduMapView = (MapView) findViewById(R.id.bmapView);
-        mBaiduMap = baiduMapView.getMap();
+        mapController = new MapController(this);
+        mapViewStatus = new MapViewStatus(this);
+
+
     }
 
     @Override
@@ -40,7 +58,7 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
 
     @Override
     protected void onResume() {
-        baiduMapView.onResume();
+        mapController.baiduMapView.onResume();
         super.onResume();
 //        umaApplication.resume(this);
 
@@ -50,7 +68,7 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
     protected void onPause() {
         super.onPause();
 //        umaApplication.pause(this);
-        baiduMapView.onPause();
+        mapController.baiduMapView.onPause();
     }
 
     @Override
@@ -63,7 +81,7 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
     protected void onDestroy() {
 //        umaApplication.destroy(this);
         super.onDestroy();
-        baiduMapView.onDestroy();
+        mapController.baiduMapView.onDestroy();
     }
 
     @Override
@@ -105,4 +123,7 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
     public void onAccelerometerUpdate(UMASensorEvent sensor) {
 
     }
+
+
+
 }
