@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="5dp">
@@ -16,6 +17,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/location"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/pos"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="90dp"
+                android:layout_marginRight="6dp"
+                android:text="p" />
+        </RelativeLayout>
+
     </AbsoluteLayout>
 
     <AbsoluteLayout
@@ -65,42 +90,35 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="food" />
+                    android:text="美食" />
 
                 <Button
                     android:id="@+id/hotel"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="hotel" />
+                    android:text="酒店" />
 
                 <Button
                     android:id="@+id/bank"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="bank" />
+                    android:text="银行" />
 
                 <Button
                     android:id="@+id/supermarket"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="super" />
+                    android:text="超市" />
 
                 <Button
                     android:id="@+id/bus"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="bus" />
-
-                <Button
-                    android:id="@+id/hospital"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="hospital" />
+                    android:text="公交" />
 
             </LinearLayout>
 
@@ -116,13 +134,13 @@
                     android:id="@+id/history1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="世纪大道" />
+                    android:text="上海大剧院" />
 
                 <Button
                     android:id="@+id/history2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="张江高科" />
+                    android:text="外高桥保税区" />
 
                 <Button
                     android:id="@+id/history3"
@@ -155,6 +173,12 @@
             android:visibility="invisible">
 
             <Button
+                android:id="@+id/searchans0"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="keyword1" />
+
+            <Button
                 android:id="@+id/searchans1"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
@@ -177,27 +201,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:text="keyword1" />
-
-            <Button
-                android:id="@+id/searchans5"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:text="keyword1" />
         </LinearLayout>
 
     </AbsoluteLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="#FFFFFFFF"
-        android:baselineAligned="true">
+        android:baselineAligned="true"
+        android:focusableInTouchMode="false">
 
         <EditText
+            android:id="@+id/editTextBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="keyword" />
+            android:hint="keyword"
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
     </android.support.design.widget.TextInputLayout>
 
 
