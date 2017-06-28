@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.MotionEvent;
 import android.widget.Button;
@@ -20,8 +21,10 @@ import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiIndoorResult;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
+import com.baidu.navisdk.adapter.BNCommonSettingParam;
 import com.baidu.navisdk.adapter.BNOuterTTSPlayerCallback;
 import com.baidu.navisdk.adapter.BNRoutePlanNode;
+import com.baidu.navisdk.adapter.BNaviSettingManager;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
@@ -272,45 +275,20 @@ public class  MapController {
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
     }
 
-    public void naviStart(View arg0) {
+    public void naviStart() {
         if ( BaiduNaviManager.isNaviInited() ) {
-            routeplanToNavi(BNRoutePlanNode.CoordinateType.WGS84);
+            routeplanToNavi();
         }
     }
 
-    private void routeplanToNavi(BNRoutePlanNode.CoordinateType coType) {
-        BNRoutePlanNode sNode = null;
-        BNRoutePlanNode eNode = null;
-        switch(coType) {
-            case GCJ02: {
-                sNode = new BNRoutePlanNode(116.30142, 40.05087,
-                        "百度大厦", null, coType);
-                eNode = new BNRoutePlanNode(116.39750, 39.90882,
-                        "北京天安门", null, coType);
-                break;
-            }
-            case WGS84: {
-                sNode = new BNRoutePlanNode(116.300821,40.050969,
-                        "百度大厦", null, coType);
-                eNode = new BNRoutePlanNode(116.397491,39.908749,
-                        "北京天安门", null, coType);
-                break;
-            }
-            case BD09_MC: {
-                sNode = new BNRoutePlanNode(12947471,4846474,
-                        "百度大厦", null, coType);
-                eNode = new BNRoutePlanNode(12958160,4825947,
-                        "北京天安门", null, coType);
-                break;
-            }
-            default : ;
-        }
-        if (sNode != null && eNode != null) {
-            List<BNRoutePlanNode> list = new ArrayList<BNRoutePlanNode>();
-            list.add(sNode);
-            list.add(eNode);
-            BaiduNaviManager.getInstance().launchNavigator(activity, list, 1, true, new DemoRoutePlanListener(sNode));
-        }
+    private void routeplanToNavi() {
+        BNRoutePlanNode sNode = new BNRoutePlanNode(mLocClient.getLastKnownLocation().getLongitude(), mLocClient.getLastKnownLocation().getLatitude(), "1", null, BNRoutePlanNode.CoordinateType.BD09LL);
+        BNRoutePlanNode eNode = new BNRoutePlanNode(mBaiduMap.getMapStatus().target.longitude, mBaiduMap.getMapStatus().target.latitude, "1", null, BNRoutePlanNode.CoordinateType.BD09LL);
+
+        List<BNRoutePlanNode> list = new ArrayList<BNRoutePlanNode>();
+        list.add(sNode);
+        list.add(eNode);
+        BaiduNaviManager.getInstance().launchNavigator(activity, list, 1, true, new DemoRoutePlanListener(sNode));
     }
 
 
@@ -336,7 +314,7 @@ public class  MapController {
         @Override
         public void onRoutePlanFailed() {
             //  TODO Auto-generated method stub
-
+            Toast.makeText(activity, "导航启动失败", Toast.LENGTH_LONG).show();
         }
     }
     private boolean initDirs() {
@@ -373,91 +351,68 @@ public class  MapController {
                     @Override
                     public void onAuthResult(int status, String msg) {
                         if (0 == status) {
-                            authinfo = "key校验成功!";
                         } else {
                             authinfo = "key校验失败, " + msg;
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(activity, authinfo, Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
-                        activity.runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                Toast.makeText(activity, authinfo,
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
                     }
 
                     public void initSuccess() {
-                        Toast.makeText(activity, "百度导航引擎初始化成功",
-                                Toast.LENGTH_SHORT).show();
+                        BNaviSettingManager
+                                .setShowTotalRoadConditionBar(BNaviSettingManager.PreViewRoadCondition.ROAD_CONDITION_BAR_SHOW_ON);
+                        BNaviSettingManager.setVoiceMode(BNaviSettingManager.VoiceMode.Veteran);
+                        // BNaviSettingManager.setPowerSaveMode(BNaviSettingManager.PowerSaveMode.DISABLE_MODE);
+                        BNaviSettingManager.setRealRoadCondition(BNaviSettingManager.RealRoadCondition.NAVI_ITS_ON);
+                        BNaviSettingManager.setIsAutoQuitWhenArrived(true);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString(BNCommonSettingParam.TTS_APP_ID, "9660018");
+                        BNaviSettingManager.setNaviSdkParam(bundle);
                     }
 
                     public void initStart() {
-                        Toast.makeText(activity, "百度导航引擎初始化开始",
-                                Toast.LENGTH_SHORT).show();
                     }
 
                     public void initFailed() {
                         Toast.makeText(activity, "百度导航引擎初始化失败",
                                 Toast.LENGTH_SHORT).show();
                     }
-                },mTTSCallback);
+                }, null, ttsHandler, ttsPlayStateListener);
     }
 
-    private BNOuterTTSPlayerCallback mTTSCallback = new BNOuterTTSPlayerCallback() {
+    private Handler ttsHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            int type = msg.what;
+            switch (type) {
+                case BaiduNaviManager.TTSPlayMsgType.PLAY_START_MSG: {
+                    Toast.makeText(activity, "Handler : TTS play start", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                case BaiduNaviManager.TTSPlayMsgType.PLAY_END_MSG: {
+                    Toast.makeText(activity, "Handler : TTS play end", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    };
+
+    private BaiduNaviManager.TTSPlayStateListener ttsPlayStateListener = new BaiduNaviManager.TTSPlayStateListener() {
 
         @Override
-        public void stopTTS() {
-            // TODO Auto-generated method stub
-
+        public void playEnd() {
+            Toast.makeText(activity, "TTSPlayStateListener : TTS play end", Toast.LENGTH_LONG).show();
         }
 
         @Override
-        public void resumeTTS() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void releaseTTSPlayer() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public int playTTSText(String speech, int bPreempt) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        @Override
-        public void phoneHangUp() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void phoneCalling() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void pauseTTS() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void initTTSPlayer() {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public int getTTSState() {
-            // TODO Auto-generated method stub
-            return 0;
+        public void playStart() {
+            Toast.makeText(activity, "TTSPlayStateListener : TTS play start", Toast.LENGTH_LONG).show();
         }
     };
 

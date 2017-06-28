@@ -17,9 +17,22 @@ repositories {
 }
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'china'
+            keyPassword 'Dnss1234'
+            storeFile file('E:/key/ketystore.jks')
+            storePassword 'Dnss1234'
+        }
+        config {
+            keyAlias 'china'
+            keyPassword 'Dnss1234'
+            storeFile file('E:/key/ketystore.jks')
+            storePassword 'Dnss1234'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion '25.0.3'
-
     defaultConfig {
         applicationId "uievolution.viper.samplelaunchee"
         minSdkVersion 18
@@ -31,6 +44,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            debuggable true
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
     sourceSets {
@@ -41,8 +60,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile(name:'UIEMultiAccess', ext:'aar')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile(name: 'UIEMultiAccess', ext: 'aar')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:25.3.1'
 }

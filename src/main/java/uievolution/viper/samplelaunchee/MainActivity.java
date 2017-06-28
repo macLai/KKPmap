@@ -95,7 +95,7 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
         findViewById(R.id.position).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("laizewen", "onClick: " + mapController.mBaiduMap.getMapStatus().target.toString());
+                mapController.naviStart();
             }
         });
         findViewById(R.id.home).setOnClickListener(onRegularPoiClickListener);
