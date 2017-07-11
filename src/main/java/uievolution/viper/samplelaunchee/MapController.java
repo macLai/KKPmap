@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
 import android.view.View;
 import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.lang.StrictMath;
 
@@ -217,7 +219,7 @@ public class  MapController {
                 return;
             }
             if (poiResult.error == SearchResult.ERRORNO.NO_ERROR) {
-                int poiSearchListMaxNum = ((LinearLayout)activity.findViewById(R.id.menuSearchLinearLayout)).getChildCount();
+                int poiSearchListMaxNum = ((LinearLayout)activity.findViewById(R.id.menuSearchLinearLayout)).getChildCount()-1;
                 int poiSearchMaxNum = StrictMath.min(poiSearchListMaxNum, poiResult.getAllPoi().size());
                 for (int i = 0; i < poiSearchMaxNum; i++) {
                     int id;
@@ -225,7 +227,11 @@ public class  MapController {
                     try {
                         id = activity.getResources().getIdentifier(ans, "id", activity.getPackageName());
                         String name = poiResult.getAllPoi().get(i).name + "\n" + poiResult.getAllPoi().get(i).address;
-                        ((Button)activity.findViewById(id)).setText(name);
+//                        ((Button)activity.findViewById(id)).setText(name);
+                        ((Button)activity.findViewById(id)).setText((Html.fromHtml("<font color=\"#323334\">"
+                                + poiResult.getAllPoi().get(i).name + "</font>"+ "<br/>"
+                                + "<small> <font color=\"#6D6D6D\">" + poiResult.getAllPoi().get(i).address
+                                + "</font> </small>")), TextView.BufferType.SPANNABLE);
                         ((Button)activity.findViewById(id)).setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         Toast.makeText(activity, "发生未知错误", Toast.LENGTH_LONG).show();
@@ -390,11 +396,11 @@ public class  MapController {
             int type = msg.what;
             switch (type) {
                 case BaiduNaviManager.TTSPlayMsgType.PLAY_START_MSG: {
-                    Toast.makeText(activity, "Handler : TTS play start", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(activity, "Handler : TTS play start", Toast.LENGTH_LONG).show();
                     break;
                 }
                 case BaiduNaviManager.TTSPlayMsgType.PLAY_END_MSG: {
-                    Toast.makeText(activity, "Handler : TTS play end", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(activity, "Handler : TTS play end", Toast.LENGTH_LONG).show();
                     break;
                 }
                 default:
@@ -407,12 +413,12 @@ public class  MapController {
 
         @Override
         public void playEnd() {
-            Toast.makeText(activity, "TTSPlayStateListener : TTS play end", Toast.LENGTH_LONG).show();
+//            Toast.makeText(activity, "TTSPlayStateListener : TTS play end", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void playStart() {
-            Toast.makeText(activity, "TTSPlayStateListener : TTS play start", Toast.LENGTH_LONG).show();
+//            Toast.makeText(activity, "TTSPlayStateListener : TTS play start", Toast.LENGTH_LONG).show();
         }
     };
 

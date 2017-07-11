@@ -1,6 +1,9 @@
 package uievolution.viper.samplelaunchee;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Instrumentation;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.content.Context;
 
+import me.drakeet.materialdialog.MaterialDialog;
 import uie.multiaccess.input.UMAHIDManager;
 import uie.multiaccess.app.UMAApplication;
 import uie.multiaccess.input.UMAHIDInputEventListener;
@@ -30,6 +34,7 @@ import android.widget.Toast;
 import android.view.View;
 import android.view.View.OnClickListener;
 import com.baidu.navisdk.adapter.BNOuterTTSPlayerCallback;
+import com.baidu.navisdk.adapter.BNRouteGuideManager;
 import com.baidu.navisdk.adapter.BNRoutePlanNode;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.baidu.navisdk.adapter.BNRoutePlanNode.CoordinateType;
@@ -46,6 +51,8 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
     private UMAApplication umaApplication = UMAApplication.INSTANCE;
     public MapController mapController = null;
     public MapViewStatus mapViewStatus = null;
+    public MaterialDialog isExit = null;
+    public MaterialDialog isGoToNavi = null;
 
 
     @Override
@@ -83,9 +90,6 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
                 {
                     // poi serach start
                     mapController.poiSearch(v.getText().toString());
-                    // hide virtual keyboard
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     return true;
                 }
                 return false;
@@ -95,7 +99,8 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
         findViewById(R.id.position).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mapController.naviStart();
+                isGoToNavi.show();
+                focusControl();
             }
         });
         findViewById(R.id.home).setOnClickListener(onRegularPoiClickListener);
@@ -110,11 +115,28 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
         findViewById(R.id.searchans2).setOnClickListener(onRegularPoiClickListener);
         findViewById(R.id.searchans3).setOnClickListener(onRegularPoiClickListener);
         findViewById(R.id.searchans4).setOnClickListener(onRegularPoiClickListener);
+        findViewById(R.id.searchans5).setOnClickListener(onRegularPoiClickListener);
+        findViewById(R.id.searchans6).setOnClickListener(onRegularPoiClickListener);
         findViewById(R.id.food).setOnClickListener(onHotSpotPoiClickListener);
         findViewById(R.id.hotel).setOnClickListener(onHotSpotPoiClickListener);
         findViewById(R.id.bank).setOnClickListener(onHotSpotPoiClickListener);
         findViewById(R.id.supermarket).setOnClickListener(onHotSpotPoiClickListener);
         findViewById(R.id.bus).setOnClickListener(onHotSpotPoiClickListener);
+        findViewById(R.id.net).setOnClickListener(onHotSpotPoiClickListener);
+
+        // 创建对话框
+        isExit = new MaterialDialog(this)
+                .setTitle("系统提示")
+                .setMessage("确定要退出吗？")
+                .setPositiveButton("确定", dialogListener)
+                .setNegativeButton("取消", dialogListener)
+                .setCanceledOnTouchOutside(true);
+        isGoToNavi = new MaterialDialog(this)
+                .setTitle("系统提示")
+                .setMessage("确定要开始导航吗？")
+                .setPositiveButton("确定", dialogListener)
+                .setNegativeButton("取消", dialogListener)
+                .setCanceledOnTouchOutside(true);
     }
 
     @Override
@@ -204,12 +226,24 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
             return true;
         }
         else if( button == UMAHIDConstants.BUTTON_BACK) {
-            mapViewStatus.setStatus(MapViewStatus.MAP_ACTION.ACTION_BACK_TOUCH);
+            if(! mapViewStatus.setStatus(MapViewStatus.MAP_ACTION.ACTION_BACK_TOUCH)) {
+                isExit.show();
+                focusControl();
+            }
             return true;
         }
         else if( button == UMAHIDConstants.BUTTON_VR) {
             mapViewStatus.setStatus(MapViewStatus.MAP_ACTION.ACTION_INPUTBOX_TOUCH);
             return true;
+
+        }
+        else if( button == UMAHIDConstants.BUTTON_MAIN) {
+            MapViewStatus.MAPVIEWSTATUS status = mapViewStatus.getMapViewStatus();
+            if( status == MapViewStatus.MAPVIEWSTATUS.STATUS_SET_POS) {
+                isGoToNavi.show();
+                focusControl();
+                return true;
+            }
         }
         return false;
     }
@@ -273,9 +307,10 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
 
     @Override
     public void onBackPressed() {
-        if ( !mapViewStatus.setStatus(MapViewStatus.MAP_ACTION.ACTION_BACK_TOUCH))
-            super.onBackPressed();
-
+        if ( !mapViewStatus.setStatus(MapViewStatus.MAP_ACTION.ACTION_BACK_TOUCH)) {
+            isExit.show();
+            focusControl();
+        }
     }
 
     public void focusControl() {
@@ -295,6 +330,20 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
             focusManager.requestFocusForView(findViewById(R.id.searchans0));
             focusManager.setVisibility(0);
         }
+        else if (status == MapViewStatus.MAPVIEWSTATUS.STATUS_EXIT) {
+            focusManager.setFocusRoot((ViewGroup)(isExit.getNegativeButton().getParent()));
+            focusManager.requestFocusForView(isExit.getNegativeButton());
+            focusManager.setVisibility(0);
+        }
+        else if (status == MapViewStatus.MAPVIEWSTATUS.STATUS_GOTO_NAVI) {
+            focusManager.setFocusRoot((ViewGroup)(isGoToNavi.getNegativeButton().getParent()));
+            focusManager.requestFocusForView(isGoToNavi.getNegativeButton());
+            focusManager.setVisibility(0);
+        }
+        if (status != MapViewStatus.MAPVIEWSTATUS.STATUS_MENU) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(findViewById(R.id.editTextBox).getWindowToken(), 0);
+        }
     }
 
     OnClickListener onRegularPoiClickListener = new OnClickListener() {
@@ -311,6 +360,25 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
         @Override
         public void onClick(View view) {
             mapController.poiSearch(((Button)view).getText().toString());
+        }
+    };
+
+    View.OnClickListener dialogListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v)
+        {
+            if(v == isExit.getPositiveButton()) {
+                finish();
+            }
+            else if(v == isGoToNavi.getPositiveButton()) {
+                mapController.naviStart();
+            }
+            if(v == isExit.getPositiveButton() || v == isExit.getNegativeButton()) {
+                isExit.dismiss();
+            }
+            else {
+                isGoToNavi.dismiss();
+            }
         }
     };
 

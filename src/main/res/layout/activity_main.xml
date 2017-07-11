@@ -2,10 +2,10 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainScreen"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="5dp">
+    android:layout_height="match_parent">
 
     <AbsoluteLayout
         android:id="@+id/mapLayout"
@@ -30,15 +30,17 @@
                 android:src="@drawable/location"
                 android:visibility="invisible" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/pos"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="90dp"
-                android:layout_marginRight="6dp"
-                android:text="p" />
+                android:layout_marginRight="10dp"
+                android:background="#FFFFFF"
+                android:elevation="1dp"
+                android:src="@drawable/gps" />
         </RelativeLayout>
 
     </AbsoluteLayout>
@@ -53,30 +55,58 @@
         <LinearLayout
             android:id="@+id/menuLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_y="70dp"
+            android:divider="@drawable/test"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:showDividers="beginning|middle"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/homeGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:divider="@drawable/test"
+                android:orientation="horizontal"
+                android:showDividers="beginning|middle|end">
 
                 <Button
                     android:id="@+id/home"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:text="HOME" />
+                    android:background="@null"
+                    android:drawableLeft="@drawable/home"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@drawable/go"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="回家"
+                    android:textColor="#68707C"
+                    android:textSize="16dp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="#EAEAEA" />
 
                 <Button
                     android:id="@+id/work"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:text="work" />
+                    android:background="@null"
+                    android:drawableLeft="@drawable/bag"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@drawable/go"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="去公司"
+                    android:textColor="#68707C"
+                    android:textSize="16dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -90,76 +120,141 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="美食" />
+                    android:background="@null"
+                    android:text="美食"
+                    android:textColor="#6A6A6A" />
 
                 <Button
                     android:id="@+id/hotel"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="酒店" />
+                    android:background="@null"
+                    android:text="酒店"
+                    android:textColor="#6A6A6A" />
 
                 <Button
                     android:id="@+id/bank"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="银行" />
+                    android:background="@null"
+                    android:text="银行"
+                    android:textColor="#6A6A6A" />
 
                 <Button
                     android:id="@+id/supermarket"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="超市" />
+                    android:background="@null"
+                    android:text="超市"
+                    android:textColor="#6A6A6A" />
 
                 <Button
                     android:id="@+id/bus"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:text="公交" />
+                    android:background="@null"
+                    android:text="公交"
+                    android:textColor="#6A6A6A" />
+
+                <Button
+                    android:id="@+id/net"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:text="网吧"
+                    android:textColor="#6A6A6A" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_gravity="center_vertical"
+                android:background="#EAEAEA" />
 
             <LinearLayout
                 android:id="@+id/historyGroup"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:divider="@drawable/test"
+                android:orientation="vertical"
+                android:showDividers="middle">
 
                 <Button
                     android:id="@+id/history1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="上海大剧院" />
+                    android:background="@null"
+                    android:drawableLeft="@drawable/history"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="上海大剧院"
+                    android:textColor="#68707C" />
 
                 <Button
                     android:id="@+id/history2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="外高桥保税区" />
+                    android:background="@null"
+                    android:drawableLeft="@drawable/history"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="外高桥保税区"
+                    android:textColor="#68707C" />
 
                 <Button
                     android:id="@+id/history3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="浦东机场" />
+                    android:background="@null"
+                    android:drawableLeft="@drawable/history"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="浦东机场"
+                    android:textColor="#68707C" />
 
                 <Button
                     android:id="@+id/history4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="东方明珠" />
+                    android:background="@null"
+                    android:drawableLeft="@drawable/history"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="东方明珠"
+                    android:textColor="#68707C" />
 
                 <Button
                     android:id="@+id/history5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="中山公园" />
+                    android:background="@null"
+                    android:drawableLeft="@drawable/history"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="中山公园"
+                    android:textColor="#68707C" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#EAEAEA" />
 
 
         </LinearLayout>
@@ -169,38 +264,126 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_y="70dp"
+            android:divider="@drawable/test"
             android:orientation="vertical"
-            android:visibility="invisible">
+            android:showDividers="beginning|middle|end"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/searchans0"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="keyword1" />
+                android:background="@null"
+                android:drawableLeft="@drawable/pin"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lineSpacingMultiplier="1.5"
+                android:lines="2"
+                android:paddingLeft="20dp"
+                android:paddingRight="50dp"
+                android:text="keyword1"
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/searchans1"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="keyword1" />
+                android:background="@null"
+                android:drawableLeft="@drawable/pin"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lineSpacingMultiplier="1.5"
+                android:lines="2"
+                android:paddingLeft="20dp"
+                android:paddingRight="50dp"
+                android:text="keyword1"
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/searchans2"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="keyword1" />
+                android:background="@null"
+                android:drawableLeft="@drawable/pin"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lineSpacingMultiplier="1.5"
+                android:lines="2"
+                android:paddingLeft="20dp"
+                android:paddingRight="50dp"
+                android:text="keyword1"
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/searchans3"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="keyword1" />
+                android:background="@null"
+                android:drawableLeft="@drawable/pin"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lineSpacingMultiplier="1.5"
+                android:lines="2"
+                android:paddingLeft="20dp"
+                android:paddingRight="50dp"
+                android:text="keyword1"
+                android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/searchans4"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="keyword1" />
+                android:background="@null"
+                android:drawableLeft="@drawable/pin"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lineSpacingMultiplier="1.5"
+                android:lines="2"
+                android:paddingLeft="20dp"
+                android:paddingRight="50dp"
+                android:text="keyword1"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/searchans5"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@null"
+                android:drawableLeft="@drawable/pin"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lineSpacingMultiplier="1.5"
+                android:lines="2"
+                android:paddingLeft="20dp"
+                android:paddingRight="50dp"
+                android:text="keyword1"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/searchans6"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@null"
+                android:drawableLeft="@drawable/pin"
+                android:drawablePadding="10dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lineSpacingMultiplier="1.5"
+                android:lines="2"
+                android:paddingLeft="20dp"
+                android:paddingRight="50dp"
+                android:textAllCaps="false" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#EAEAEA" />
         </LinearLayout>
 
     </AbsoluteLayout>
@@ -210,7 +393,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="#FFFFFFFF"
+        android:background="@drawable/edit"
         android:baselineAligned="true"
         android:focusableInTouchMode="false">
 
@@ -218,9 +401,15 @@
             android:id="@+id/editTextBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="keyword"
+            android:background="@null"
+            android:drawableLeft="@drawable/search"
+            android:drawablePadding="10dp"
             android:imeOptions="actionDone"
-            android:singleLine="true" />
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:singleLine="true"
+            android:textColor="#68707C" />
     </android.support.design.widget.TextInputLayout>
 
 
