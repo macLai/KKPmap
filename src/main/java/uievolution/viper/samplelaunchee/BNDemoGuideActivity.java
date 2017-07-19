@@ -67,7 +67,8 @@ public class BNDemoGuideActivity extends Activity  implements UMAHIDInputEventLi
         super.onStart();
         umaApplication.start(this);
 
-        hd.sendEmptyMessageDelayed(MSG_SHOW, 5000);
+        if(hd != null)
+            hd.sendEmptyMessageDelayed(MSG_SHOW, 5000);
     }
 
     @Override
@@ -76,7 +77,8 @@ public class BNDemoGuideActivity extends Activity  implements UMAHIDInputEventLi
         super.onResume();
         umaApplication.resume(this);
 
-        hd.sendEmptyMessageDelayed(MSG_SHOW, 5000);
+        if(hd != null)
+            hd.sendEmptyMessageDelayed(MSG_SHOW, 5000);
     }
 
     protected void onPause() {

@@ -147,7 +147,8 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
 
     @Override
     protected void onResume() {
-        mapController.baiduMapView.onResume();
+        if(mapController.baiduMapView != null)
+            mapController.baiduMapView.onResume();
         super.onResume();
         umaApplication.resume(this);
 
@@ -157,7 +158,8 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
     protected void onPause() {
         super.onPause();
         umaApplication.pause(this);
-        mapController.baiduMapView.onPause();
+        if(mapController.baiduMapView != null)
+            mapController.baiduMapView.onPause();
     }
 
     @Override
@@ -170,7 +172,8 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
     protected void onDestroy() {
         umaApplication.destroy(this);
         super.onDestroy();
-        mapController.baiduMapView.onDestroy();
+        if(mapController.baiduMapView != null)
+            mapController.baiduMapView.onDestroy();
     }
 
     @Override
@@ -255,7 +258,6 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
 
     @Override
     public void onDoubleClickButton(int button) {
-        Toast.makeText(this, "onDoubleClickButton", Toast.LENGTH_SHORT).show();
     }
 
     @Override

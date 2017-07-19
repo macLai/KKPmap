@@ -73,11 +73,13 @@ public class  MapController {
     String authinfo = null;
 
     public MapController(MainActivity main) {
+        if(main == null) return;
         activity = main;
 
         baiduMapView = (MapView) activity.findViewById(R.id.bmapView);
 
         mBaiduMap = baiduMapView.getMap();
+        if(mBaiduMap == null) return;
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         mBaiduMap.setOnMapTouchListener(onMapTouchListener);
         mBaiduMap.setOnMyLocationClickListener(onMyLocationClickListener);
@@ -86,13 +88,16 @@ public class  MapController {
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(18.0f));
 
         mLocClient = new LocationClient(activity);
+        if(mLocClient == null) return;
         mLocClient.registerLocationListener(myListener);
 
         poiSearch = PoiSearch.newInstance();
+        if(mLocClient == null) return;
         poiSearch.setOnGetPoiSearchResultListener(poiSearchListener);
 
         ///LocationClientOption类用来设置定位SDK的定位方式，
         LocationClientOption option = new LocationClientOption(); //以下是给定位设置参数
+        if(option == null) return;
         option.setOpenGps(true); // 打开gps
         option.setCoorType("bd09ll"); // 设置坐标类型
         option.setScanSpan(1000);
@@ -121,10 +126,16 @@ public class  MapController {
 
         @Override
         public void onMapStatusChangeFinish(MapStatus mapStatus) {
+            if(mBaiduMap == null) return;
+            if(mBaiduMap.getMapStatus() == null) return;
+            if(mBaiduMap.getMapStatus().target == null) return;
             double latitude = mBaiduMap.getMapStatus().target.latitude;
             latitude = new BigDecimal(latitude).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
             double longitude = mBaiduMap.getMapStatus().target.longitude;
             longitude = new BigDecimal(longitude).setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+            if(mLocClient == null) return;
+            if(mLocClient.getLastKnownLocation() == null) return;
             if(latitude != mLocClient.getLastKnownLocation().getLatitude() ||
                     longitude != mLocClient.getLastKnownLocation().getLongitude()) {
                 activity.findViewById(R.id.position).setVisibility(View.VISIBLE);
@@ -136,6 +147,9 @@ public class  MapController {
     };
     BaiduMap.OnMyLocationClickListener onMyLocationClickListener = new BaiduMap.OnMyLocationClickListener() {
         public boolean onMyLocationClick(){
+            if(mLocClient == null) return true;
+            if(mLocClient.getLastKnownLocation() == null) return true;
+            if(mBaiduMap == null) return true;
             LatLng ll = new LatLng(mLocClient.getLastKnownLocation().getLatitude(),mLocClient.getLastKnownLocation().getLongitude());
             MapStatus.Builder builder = new MapStatus.Builder();
             builder.target(ll);
@@ -146,6 +160,9 @@ public class  MapController {
     };
 
     public void poiSearch(String text) {
+        if(mLocClient == null) return;
+        if(mLocClient.getLastKnownLocation() == null) return;
+        if(poiSearch == null) return;
         PoiNearbySearchOption nearbySearchOption = new PoiNearbySearchOption();
         LatLng ll = new LatLng(mLocClient.getLastKnownLocation().getLatitude(),mLocClient.getLastKnownLocation().getLongitude());
         nearbySearchOption.location(ll).keyword(text).radius(5000).pageNum(1);
@@ -157,6 +174,7 @@ public class  MapController {
         ACTION_ZOOM_OUT, ACTION_ZOOM_IN, ACTION_SCROLL_UP, ACTION_SCROLL_DOWN, ACTION_SCROLL_LEFT, ACTION_SCROLL_RIGHT, ACTION_LONG_SCROLL_START, ACTION_LONG_SCROLL_END
     }
     public void zoomControl(MAP_ACTION direction) {
+        if(mBaiduMap == null) return;
         if ( direction == MAP_ACTION.ACTION_ZOOM_OUT ) {
             mBaiduMap.animateMapStatus(MapStatusUpdateFactory.zoomOut());
         }
@@ -166,6 +184,7 @@ public class  MapController {
     }
 
     public void scrollControl(MAP_ACTION direction) {
+        if(mBaiduMap == null) return;
         if ( direction == MAP_ACTION.ACTION_SCROLL_UP) {
             mBaiduMap.animateMapStatus(MapStatusUpdateFactory.scrollBy(0, -100));
         }
@@ -276,6 +295,7 @@ public class  MapController {
 
     private void setDirection(LatLng direction) {
         if(direction == null) return;
+        if(mBaiduMap == null) return;
         MapStatus.Builder builder = new MapStatus.Builder();
         builder.target(direction);
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
@@ -288,6 +308,11 @@ public class  MapController {
     }
 
     private void routeplanToNavi() {
+        if(mLocClient == null) return;
+        if(mLocClient.getLastKnownLocation() == null) return;
+        if(mBaiduMap == null) return;
+        if(mBaiduMap.getMapStatus() == null) return;
+        if(mBaiduMap.getMapStatus().target == null) return;
         BNRoutePlanNode sNode = new BNRoutePlanNode(mLocClient.getLastKnownLocation().getLongitude(), mLocClient.getLastKnownLocation().getLatitude(), "1", null, BNRoutePlanNode.CoordinateType.BD09LL);
         BNRoutePlanNode eNode = new BNRoutePlanNode(mBaiduMap.getMapStatus().target.longitude, mBaiduMap.getMapStatus().target.latitude, "1", null, BNRoutePlanNode.CoordinateType.BD09LL);
 
@@ -427,7 +452,7 @@ public class  MapController {
         @Override
         public void onReceiveLocation(BDLocation location) {
             // map view 销毁后不在处理新接收的位置
-            if (location == null || baiduMapView == null) {
+            if (location == null || baiduMapView == null || mBaiduMap == null) {
                 return;
             }
             MyLocationData locData = new MyLocationData.Builder()
