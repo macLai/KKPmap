@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.support.design.widget.TextInputLayout;
 import android.view.ViewGroup;
@@ -58,7 +59,9 @@ public class MainActivity extends Activity implements UMAHIDInputEventListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         SDKInitializer.initialize(getApplicationContext());
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
         umaApplication.create(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
